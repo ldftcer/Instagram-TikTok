@@ -1,26 +1,31 @@
+# Use Python 3.9 slim image
 FROM python:3.9-slim
 
+# Set working directory
 WORKDIR /app
 
+# Install system dependencies and update pip
 RUN apt-get update && apt-get install -y \
     ffmpeg \
+    gcc \
+    python3-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && python -m pip install --upgrade pip
+    && python -m pip install --upgrade pip setuptools wheel
 
+# Copy requirements first to leverage Docker cache
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir aiogram==3.0.0 \
-    && pip install --no-cache-dir yt-dlp==2023.0.0 \
-    && pip install --no-cache-dir python-dotenv==1.0.0 \
-    && pip install --no-cache-dir aiohttp==3.8.0 \
-    && pip install --no-cache-dir asyncio==3.4.3 \
-    && pip install --no-cache-dir psutil==5.9.0 \
-    && pip install --no-cache-dir aiofiles==23.1.0
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy the rest of the application
 COPY . .
 
+# Create necessary directories
 RUN mkdir -p data downloads logs
 
+# Set environment variables
 ENV PYTHONUNBUFFERED=1
 
+# Run the bot
 CMD ["python", "bot.py"]

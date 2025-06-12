@@ -30,21 +30,26 @@ logging.basicConfig(
 async def start_command(message: types.Message):
     user_id = str(message.from_user.id)
     
-    if db.is_user_banned(user_id):
+    if user_id in db.user_data["banned"]:
         return await message.answer(TRANSLATIONS["ru"]["banned"])
     
     if user_id not in db.user_data["users"]:
-        db.add_user(
-            user_id,
-            message.from_user.username,
-            message.from_user.first_name,
-            message.from_user.last_name
-        )
+        db.user_data["users"][user_id] = {
+            "language": None,
+            "username": message.from_user.username,
+            "first_name": message.from_user.first_name,
+            "last_name": message.from_user.last_name,
+            "join_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "last_activity": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        }
+        db.save_data()
         await message.answer(TRANSLATIONS["ru"]["choose_language"], reply_markup=LANG_KEYBOARD)
     else:
-        db.update_user_activity(user_id)
-        lang = db.get_user_language(user_id)
-        is_premium = db.is_user_premium(user_id)
+        db.user_data["users"][user_id]["last_activity"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        db.save_data()
+        
+        lang = db.user_data["users"].get(user_id, {}).get("language", "ru")
+        is_premium = user_id in db.user_data.get("premium", [])
         await message.answer(
             TRANSLATIONS[lang]["send_link"], 
             reply_markup=get_menu_keyboard(lang, is_premium)
@@ -128,75 +133,37 @@ async def callback_handler(callback: types.CallbackQuery):
 async def handle_message(message: types.Message):
     user_id = str(message.from_user.id)
     
-    # Handle admin commands
-    if message.reply_to_message and user_id == ADMIN_ID:
-        if message.reply_to_message.text == "Ответьте на это сообщение с текстом для рассылки:":
-            broadcast_text = message.text
-            sent_count = 0
-            fail_count = 0
-            
-            await message.answer("Начинаю рассылку...")
-            
-            for uid in db.user_data["users"]:
-                try:
-                    await bot.send_message(uid, broadcast_text)
-                    sent_count += 1
-                    await asyncio.sleep(0.05)
-                except Exception as e:
-                    fail_count += 1
-                    logging.error(f"Failed to send broadcast to {uid}: {e}")
-            
-            return await message.answer(f"Рассылка завершена. Отправлено: {sent_count}, Ошибок: {fail_count}")
-        
-        elif message.reply_to_message.text == "Ответьте на это сообщение с ID пользователя для блокировки:":
-            ban_id = message.text.strip()
-            if db.ban_user(ban_id):
-                return await message.answer(f"Пользователь {ban_id} заблокирован")
-            else:
-                return await message.answer(f"Пользователь {ban_id} не найден или уже заблокирован")
-        
-        elif message.reply_to_message.text == "Ответьте на это сообщение с ID пользователя для добавления Premium:":
-            premium_id = message.text.strip()
-            if db.toggle_premium(premium_id):
-                return await message.answer(f"Premium статус изменен для пользователя {premium_id}")
-            else:
-                return await message.answer(f"Пользователь {premium_id} не найден")
+    if user_id in db.user_data["users"]:
+        db.user_data["users"][user_id]["last_activity"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        db.save_data()
     
-    # Update user activity
-    db.update_user_activity(user_id)
-    
-    # Check if user is banned
-    if db.is_user_banned(user_id):
-        lang = db.get_user_language(user_id)
+    if user_id in db.user_data["banned"]:
+        lang = db.user_data["users"].get(user_id, {}).get("language", "ru")
         return await message.answer(TRANSLATIONS[lang]["banned"])
     
-    # Handle language selection
     if message.text in LANG_MAP:
-        db.set_user_language(user_id, LANG_MAP[message.text])
-        is_premium = db.is_user_premium(user_id)
+        db.user_data["users"][user_id]["language"] = LANG_MAP[message.text]
+        db.save_data()
+        is_premium = user_id in db.user_data.get("premium", [])
         await message.answer(
             TRANSLATIONS[LANG_MAP[message.text]]["saved_language"], 
             reply_markup=get_menu_keyboard(LANG_MAP[message.text], is_premium)
         )
         return
     
-    # Check if user has selected language
-    if user_id not in db.user_data["users"] or db.get_user_language(user_id) is None:
+    if user_id not in db.user_data["users"] or db.user_data["users"][user_id]["language"] is None:
         await message.answer(TRANSLATIONS["ru"]["choose_language"], reply_markup=LANG_KEYBOARD)
         return
     
-    lang = db.get_user_language(user_id)
-    is_premium = db.is_user_premium(user_id)
+    lang = db.user_data["users"].get(user_id, {}).get("language", "ru")
+    is_premium = user_id in db.user_data.get("premium", [])
     
-    # Handle help command
-    if message.text in ["ℹ️ Օգնություն", "ℹ️ Help", "ℹ️ Помощь"]:
+    if message.text == "ℹ️ Help" or message.text == "ℹ️ Помощь" or message.text == "ℹ️ Օգնություն":
         return await message.answer(TRANSLATIONS[lang]["help"])
     
-    # Handle language change command
-    if message.text in ["🔄 Փոխել լեզուն", "🔄 Change language", "🔄 Сменить язык"]:
+    if message.text == "🔄 Change language" or message.text == "🔄 Сменить язык" or message.text == "🔄 Փոխել լեզուն":
         return await message.answer(TRANSLATIONS[lang]["change_language"], reply_markup=LANG_KEYBOARD)
     
-    # Handle premium info
     if message.text == "⭐️ Premium":
         admin_contact = types.InlineKeyboardMarkup(
             inline_keyboard=[[types.InlineKeyboardButton(
@@ -206,11 +173,9 @@ async def handle_message(message: types.Message):
         )
         return await message.answer(TRANSLATIONS[lang]["premium_info"], reply_markup=admin_contact)
     
-    # Handle video download
     if VideoDownloader.is_valid_url(message.text):
         url = message.text.strip()
         
-        # Check rate limit for free users
         if not is_premium and db.get_user_stats(user_id)["downloads"] >= 5:
             return await message.answer(TRANSLATIONS[lang]["rate_limit"])
         
@@ -235,15 +200,14 @@ async def periodic_tasks():
     while True:
         try:
             # Clean up old files
-            now = datetime.now()
             for filename in os.listdir(TEMP_DIR):
                 file_path = os.path.join(TEMP_DIR, filename)
-                if os.path.isfile(file_path) and os.path.getmtime(file_path) < now.timestamp() - FILE_CLEANUP_INTERVAL:
+                if os.path.isfile(file_path) and os.path.getmtime(file_path) < time.time() - FILE_CLEANUP_INTERVAL:
                     os.remove(file_path)
             
             # Backup data
-            if now.weekday() == 0 and now.hour == 0:
-                backup_time = now.strftime("%Y%m%d")
+            if datetime.now().weekday() == 0 and datetime.now().hour == 0:
+                backup_time = datetime.now().strftime("%Y%m%d")
                 backup_data = {
                     "user_data": db.user_data,
                     "stats": db.stats

@@ -1,0 +1,99 @@
+2025-06-12 04:40:45,089 - root - ERROR - Error in periodic tasks: name 'os' is not defined
+2025-06-12 04:40:45,381 - aiogram.dispatcher - INFO - Start polling
+2025-06-12 04:40:45,445 - aiogram.dispatcher - INFO - Run polling for bot @music_clouds_bot id=7908306407 - 'My Music Bot'
+2025-06-12 04:40:52,151 - aiogram.event - INFO - Update id=475315151 is handled. Duration 200 ms by bot id=7908306407
+2025-06-12 04:40:54,157 - aiogram.event - INFO - Update id=475315152 is handled. Duration 88 ms by bot id=7908306407
+2025-06-12 04:41:18,291 - aiogram.event - INFO - Update id=475315153 is not handled. Duration 77 ms by bot id=7908306407
+2025-06-12 04:41:18,292 - aiogram.event - ERROR - Cause exception while process update id=475315153 by bot id=7908306407
+NameError: name 'time' is not defined
+Traceback (most recent call last):
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<7 lines>...
+    )
+    ^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        observer=observer, update_type=update_type, event=telegram_event, **data
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "c:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\bot.py", line 217, in handle_message
+    success, result, platform = await VideoDownloader.download_video(url, user_id, is_premium)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\narek\OneDrive\Рабочий стол\RailWay\tiktokInstagramdownload-main\downloader.py", line 54, in download_video
+    output_file = f"{TEMP_DIR}/{user_id}_{int(time.time())}.mp4"
+                                              ^^^^
+NameError: name 'time' is not defined. Did you forget to import 'time'?
+2025-06-12 04:41:45,091 - root - ERROR - Error in periodic tasks: name 'os' is not defined
+2025-06-12 04:42:05,036 - aiogram.dispatcher - INFO - Polling stopped
+2025-06-12 04:42:05,304 - aiogram.dispatcher - INFO - Polling stopped for bot @music_clouds_bot id=7908306407 - 'My Music Bot'
+2025-06-12 04:42:20,990 - root - ERROR - Error in periodic tasks: name 'os' is not defined
+2025-06-12 04:42:21,195 - aiogram.dispatcher - INFO - Start polling
+2025-06-12 04:42:21,263 - aiogram.dispatcher - INFO - Run polling for bot @music_clouds_bot id=7908306407 - 'My Music Bot'
+2025-06-12 04:42:31,731 - aiogram.event - INFO - Update id=475315154 is handled. Duration 4631 ms by bot id=7908306407
+2025-06-12 04:42:38,627 - aiogram.event - INFO - Update id=475315155 is handled. Duration 2328 ms by bot id=7908306407
+2025-06-12 04:43:20,995 - root - ERROR - Error in periodic tasks: name 'os' is not defined
+2025-06-12 04:44:31,791 - root - ERROR - Error in periodic tasks: name 'os' is not defined
+2025-06-12 04:44:32,002 - aiogram.dispatcher - INFO - Start polling
+2025-06-12 04:44:32,068 - aiogram.dispatcher - INFO - Run polling for bot @ClipSnapbot id=7531357371 - 'ClipSnap'
+2025-06-12 04:44:36,140 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:44:36,140 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7531357371)
+2025-06-12 04:44:41,424 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:44:41,425 - aiogram.dispatcher - WARNING - Sleep for 1.389200 seconds and try again... (tryings = 1, bot id = 7531357371)
+2025-06-12 04:44:47,481 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:44:47,482 - aiogram.dispatcher - WARNING - Sleep for 1.928795 seconds and try again... (tryings = 2, bot id = 7531357371)
+2025-06-12 04:44:54,552 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:44:54,552 - aiogram.dispatcher - WARNING - Sleep for 2.411578 seconds and try again... (tryings = 3, bot id = 7531357371)
+2025-06-12 04:45:02,771 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:45:02,771 - aiogram.dispatcher - WARNING - Sleep for 2.949452 seconds and try again... (tryings = 4, bot id = 7531357371)
+2025-06-12 04:45:17,615 - aiogram.dispatcher - INFO - Start polling
+2025-06-12 04:45:17,816 - aiogram.dispatcher - INFO - Run polling for bot @ClipSnapbot id=7531357371 - 'ClipSnap'
+2025-06-12 04:45:22,411 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:45:22,411 - aiogram.dispatcher - WARNING - Sleep for 1.000000 seconds and try again... (tryings = 0, bot id = 7531357371)
+2025-06-12 04:45:31,450 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:45:31,451 - aiogram.dispatcher - WARNING - Sleep for 1.287609 seconds and try again... (tryings = 1, bot id = 7531357371)
+2025-06-12 04:45:40,754 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:45:40,755 - aiogram.dispatcher - WARNING - Sleep for 1.714585 seconds and try again... (tryings = 2, bot id = 7531357371)
+2025-06-12 04:45:50,570 - aiogram.dispatcher - ERROR - Failed to fetch updates - TelegramConflictError: Telegram server says - Conflict: terminated by other getUpdates request; make sure that only one bot instance is running
+2025-06-12 04:45:50,570 - aiogram.dispatcher - WARNING - Sleep for 2.072101 seconds and try again... (tryings = 3, bot id = 7531357371)
+2025-06-12 04:45:57,125 - aiogram.dispatcher - INFO - Start polling
+2025-06-12 04:45:57,325 - aiogram.dispatcher - INFO - Run polling for bot @music_clouds_bot id=7908306407 - 'My Music Bot'
+2025-06-12 04:46:09,241 - aiogram.event - INFO - Update id=475315158 is handled. Duration 231 ms by bot id=7908306407
+2025-06-12 04:46:16,204 - aiogram.event - INFO - Update id=475315159 is handled. Duration 2270 ms by bot id=7908306407
+2025-06-12 04:46:26,766 - aiogram.event - INFO - Update id=475315160 is handled. Duration 4072 ms by bot id=7908306407

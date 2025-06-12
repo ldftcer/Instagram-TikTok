@@ -1,0 +1,23 @@
+{
+    "total_downloads": 4,
+    "daily": {
+        "2025-06-12": {
+            "success": 4,
+            "failed": 0
+        }
+    },
+    "users": {
+        "5743254515": {
+            "downloads": 4,
+            "failed": 0,
+            "platforms": {
+                "tiktok": 2,
+                "instagram": 2
+            }
+        }
+    },
+    "platforms": {
+        "tiktok": 2,
+        "instagram": 2
+    }
+}

@@ -36,13 +36,87 @@ class VideoDownloader:
                 return {
                     'format': 'best',
                     'quiet': True,
-                    'noplaylist': True
+                    'noplaylist': True,
+                    'extractor_args': {
+                        'tiktok': {
+                            'api_hostname': 'api16-normal-c-useast1a.tiktokv.com',
+                            'app_version': '20.2.1',
+                            'device_id': '7168534261740988934',
+                            'channel': 'googleplay',
+                            'mcc_mnc': '310260',
+                            'os_version': '10',
+                            'version_code': '200201',
+                            'device_type': 'Pixel 4',
+                            'language': 'en',
+                            'resolution': '1080*1920',
+                            'openudid': 'a1b2c3d4e5f6g7h8',
+                            'sys_region': 'US',
+                            'os_api': '29',
+                            'timezone_name': 'America/New_York',
+                            'residence': 'US',
+                            'app_language': 'en',
+                            'ac2_wifi': '0',
+                            'dpi': '420',
+                            'carrier_region': 'US',
+                            'ac': 'wifi',
+                            'app_name': 'trill',
+                            'device_platform': 'android',
+                            'build_number': '10.2.1',
+                            'version_name': '10.2.1',
+                            'timezone_offset': '-14400',
+                            'channel': 'googleplay',
+                            'mcc_mnc': '310260',
+                            'is_my_cn': '0',
+                            'aid': '1340',
+                            'ssmix': 'a',
+                            'as': 'a1qwert123',
+                            'cp': 'androide1',
+                            'mas': '0123456789abcdef'
+                        }
+                    }
                 }
             else:
                 return {
                     'format': f'best[filesize<{max_size}M]',
                     'quiet': True,
-                    'noplaylist': True
+                    'noplaylist': True,
+                    'extractor_args': {
+                        'tiktok': {
+                            'api_hostname': 'api16-normal-c-useast1a.tiktokv.com',
+                            'app_version': '20.2.1',
+                            'device_id': '7168534261740988934',
+                            'channel': 'googleplay',
+                            'mcc_mnc': '310260',
+                            'os_version': '10',
+                            'version_code': '200201',
+                            'device_type': 'Pixel 4',
+                            'language': 'en',
+                            'resolution': '1080*1920',
+                            'openudid': 'a1b2c3d4e5f6g7h8',
+                            'sys_region': 'US',
+                            'os_api': '29',
+                            'timezone_name': 'America/New_York',
+                            'residence': 'US',
+                            'app_language': 'en',
+                            'ac2_wifi': '0',
+                            'dpi': '420',
+                            'carrier_region': 'US',
+                            'ac': 'wifi',
+                            'app_name': 'trill',
+                            'device_platform': 'android',
+                            'build_number': '10.2.1',
+                            'version_name': '10.2.1',
+                            'timezone_offset': '-14400',
+                            'channel': 'googleplay',
+                            'mcc_mnc': '310260',
+                            'is_my_cn': '0',
+                            'aid': '1340',
+                            'ssmix': 'a',
+                            'as': 'a1qwert123',
+                            'cp': 'androide1',
+                            'mas': '0123456789abcdef'
+                        }
+                    }
                 }
 
     @staticmethod

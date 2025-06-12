@@ -2,6 +2,8 @@ import asyncio
 import logging
 import os
 import json
+import time
+import signal
 from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
@@ -16,7 +18,10 @@ from downloader import VideoDownloader
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# Setup logging
+# Initialize database
+db = db
+
+# Set up logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -25,6 +30,19 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+# Global flag for graceful shutdown
+is_running = True
+
+def handle_sigterm(signum, frame):
+    """Handle SIGTERM signal for graceful shutdown."""
+    global is_running
+    logging.info("Received shutdown signal")
+    is_running = False
+
+# Register signal handlers
+signal.signal(signal.SIGTERM, handle_sigterm)
+signal.signal(signal.SIGINT, handle_sigterm)
 
 @dp.message(Command("start"))
 async def start_command(message: types.Message):
@@ -196,8 +214,7 @@ async def handle_message(message: types.Message):
                           reply_markup=get_menu_keyboard(lang, is_premium))
 
 async def periodic_tasks():
-    """Run periodic tasks like cleanup and backup."""
-    while True:
+    while is_running:
         try:
             # Clean up old files
             for filename in os.listdir(TEMP_DIR):
@@ -216,7 +233,7 @@ async def periodic_tasks():
                 
                 with open(backup_file, "w", encoding="utf-8") as f:
                     json.dump(backup_data, f, indent=4, ensure_ascii=False)
-                    
+                
                 if os.path.exists(backup_file):
                     try:
                         await bot.send_document(
@@ -239,20 +256,21 @@ async def periodic_tasks():
             await asyncio.sleep(60)
 
 async def main():
-    """Main function to start the bot."""
     try:
-        # Delete webhook and stop any existing sessions
-        await bot.delete_webhook(drop_pending_updates=True)
-        await bot.session.close()
-        
         # Start periodic tasks
-        asyncio.create_task(periodic_tasks())
+        periodic_task = asyncio.create_task(periodic_tasks())
         
-        # Start polling
+        # Delete webhook and start polling
+        await bot.delete_webhook(drop_pending_updates=True)
         await dp.start_polling(bot)
+        
+        # Wait for periodic task to complete
+        await periodic_task
     except Exception as e:
         logging.error(f"Error in main: {e}")
-        raise
+    finally:
+        # Cleanup
+        await bot.session.close()
 
 if __name__ == "__main__":
     try:

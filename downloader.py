@@ -25,18 +25,33 @@ class VideoDownloader:
         """Get download options based on user status and platform."""
         max_size = MAX_FILE_SIZE_PREMIUM if is_premium else MAX_FILE_SIZE_FREE
         
+        base_opts = {
+            'quiet': True,
+            'noplaylist': True,
+            'no_warnings': True,
+            'ignoreerrors': True,
+            'extract_flat': True,
+            'no_color': True
+        }
+        
         if platform == "instagram":
             return {
+                **base_opts,
                 'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-                'quiet': True,
-                'noplaylist': True
+                'cookiesfrombrowser': ('chrome',),
+                'extractor_args': {
+                    'instagram': {
+                        'login': True,
+                        'username': os.getenv('INSTAGRAM_USERNAME', ''),
+                        'password': os.getenv('INSTAGRAM_PASSWORD', '')
+                    }
+                }
             }
         else:  # TikTok and others
             if is_premium:
                 return {
+                    **base_opts,
                     'format': 'best',
-                    'quiet': True,
-                    'noplaylist': True,
                     'extractor_args': {
                         'tiktok': {
                             'api_hostname': 'api16-normal-c-useast1a.tiktokv.com',
@@ -77,9 +92,8 @@ class VideoDownloader:
                 }
             else:
                 return {
+                    **base_opts,
                     'format': f'best[filesize<{max_size}M]',
-                    'quiet': True,
-                    'noplaylist': True,
                     'extractor_args': {
                         'tiktok': {
                             'api_hostname': 'api16-normal-c-useast1a.tiktokv.com',
@@ -150,7 +164,15 @@ class VideoDownloader:
                         'format': 'best',
                         'outtmpl': output_file,
                         'quiet': True,
-                        'noplaylist': True
+                        'noplaylist': True,
+                        'cookiesfrombrowser': ('chrome',),
+                        'extractor_args': {
+                            'instagram': {
+                                'login': True,
+                                'username': os.getenv('INSTAGRAM_USERNAME', ''),
+                                'password': os.getenv('INSTAGRAM_PASSWORD', '')
+                            }
+                        }
                     }
                     with yt_dlp.YoutubeDL(alternative_opts) as ydl:
                         ydl.download([url])

@@ -38,7 +38,7 @@ class VideoDownloader:
             return {
                 **base_opts,
                 'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-                'cookiesfrombrowser': ('chrome',),
+                'cookies': 'cookies.txt',
                 'extractor_args': {
                     'instagram': {
                         'login': True,
@@ -165,7 +165,7 @@ class VideoDownloader:
                         'outtmpl': output_file,
                         'quiet': True,
                         'noplaylist': True,
-                        'cookiesfrombrowser': ('chrome',),
+                        'cookies': 'cookies.txt',
                         'extractor_args': {
                             'instagram': {
                                 'login': True,
